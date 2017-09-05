@@ -2,6 +2,8 @@
 #
 # Example input: [1, 2, 2, 3]
 # Example output: [1, 2, 3]
+
+
 def remove_adjacent(lst):
     res = []
     for i in lst:
@@ -9,6 +11,7 @@ def remove_adjacent(lst):
             continue
         res.append(i)
     return res
+
 
 # Merge two sorted lists in one sorted list in linear time
 #
@@ -32,5 +35,5 @@ def linear_merge(lst1, lst2):
             pn1 += 1
         else:
             res.append(lst2[pn2])
-            pn2 += 1        
+            pn2 += 1
     return res
