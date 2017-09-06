@@ -48,17 +48,14 @@ def count_words(filename):
 
 def print_words(filename):
     res = count_words(filename)
-    for i in sorted(res.items(), key=lambda item: item[0]):
-        print(i[0], ' ', i[1])
-    return
+    for word, count in sorted(res.items(), key=lambda item: item[0]):
+        print(word, count)
 
 
 def print_top(filename):
     res = count_words(filename)
-    res = sorted(res.items(), key=lambda item: item[1], reverse=True)
-    for i in range(min(20, len(res))):
-        print(res[i][0])
-    return
+    for word, count in sorted(res.items(), key=lambda item: item[1], reverse=True)[:20]:
+        print(word)
 
 ###
 # This basic command line argument parsing code is provided and

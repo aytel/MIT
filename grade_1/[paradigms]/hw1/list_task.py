@@ -7,7 +7,7 @@
 def remove_adjacent(lst):
     res = []
     for i in lst:
-        if (len(res) != 0 and res[len(res) - 1] == i):
+        if res and res[-1] == i:
             continue
         res.append(i)
     return res
@@ -21,16 +21,14 @@ def linear_merge(lst1, lst2):
     res = []
     pn1 = 0
     pn2 = 0
-    while (pn1 != len(lst1) and pn2 != len(lst2)):
-        if (pn1 == len(lst1)):
+    while pn1 != len(lst1) or pn2 != len(lst2):
+        if pn1 == len(lst1):
             res.append(lst2[pn2])
             pn2 += 1
-            continue
-        if (pn2 == len(lst2)):
+        elif pn2 == len(lst2):
             res.append(lst1[pn1])
             pn1 += 1
-            continue
-        if (lst1[pn1] < lst2[pn2]):
+        elif lst1[pn1] < lst2[pn2]:
             res.append(lst1[pn1])
             pn1 += 1
         else:
