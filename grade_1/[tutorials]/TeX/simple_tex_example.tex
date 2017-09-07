@@ -1,0 +1,145 @@
+%
+% Проверьте, что вы сохранили файл в кодировке utf8
+%
+
+\documentclass[12pt]{article} % 12 -- размер шрифта
+
+\usepackage{cmap} % Чтобы можно было копировать русский текст из pdf
+\usepackage[T2A]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage[utf8]{inputenc} % Проверьте, что кодировка файла -- тоже utf8
+\usepackage{amsmath, amssymb} % Чтобы юзать математические символы
+
+\usepackage{hologo} % Логотип LaTex
+\usepackage[russian]{hyperref} % http ссылки на внешние источники
+
+% Меняем размер листа, можно не менять
+\textwidth=160mm
+\hoffset=-15mm
+\textheight=240mm
+\voffset=-20mm
+
+\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} % Фиксим багу с отступом в начале section, заодно пример собственных функций
+
+\begin{document}
+
+\Section{Примеры tex}
+
+Это текст.
+
+Формулы окружают долларами (\$) -- $a_1^5 + x^{100}_{i} + x_{i}^{100} - \frac{1}{2} = t^* - e'$.
+
+Полезно заметить, что перед математическими стандарнтыми операциями вроде
+логарифма стоит писать \texttt{\textbackslash}, например, $\log^2 n$, без него будет $log^2 n$.
+
+{\bf Пример жирного.}
+
+{\it Пример курсива.}
+
+\texttt{Моноширинный шрифт. Удобно для C++ кода.}
+
+\texttt{int main() \{ return 0; \}}
+
+\def\t{\texttt} % Это наша собственная команда. Мы её в середине файла используем.
+Мы же программисты? Можно создавать свои команды:\\
+
+\t{Тестируем... Работает.}
+
+Для перевода строки нужна пустая строка.
+Здесь нет перевода строки.
+
+Ещё строку переводить можно так: \texttt{``\textbackslash\textbackslash''}\\
+Работает. Кстати, обратите внимания на кавычки, а тире --- оно длинное.
+
+Как тексте могут быть формулы, так и в формулах текст!\\
+$\frac{a \cdot \mbox{Я внутри дроби!} \cdot b}{\t{Я тоже! Как я сюда попал?}}$
+
+\section{Заголовок: $1 = \Theta(3)$.}
+\subsection{Подзаголовок: $2^n = \Omega(n^2)$, более того, $2^n = \omega(n^2)$.}
+\subsubsection{Подподзаголовок: $n = O(n^2)$, $n^2 = \mathcal{O}(n^3)$, $\pi \in \mathbb{R}$} % Буквы можно окружать \mathcal, \mathbb
+
+\Section{Списки.}
+
+А еще тут есть пронумерованный списочек.
+\begin{enumerate}
+  \setlength{\parskip}{0pt} % Отступ перед списком
+  \setlength{\itemsep}{0pt} % Отступ между строками списка
+  \item Eins! Hier kommt die Sonne
+  \item Zwei! Hier kommt die Sonne
+  \item Drei! Sie ist der hellste Stern von allen
+  \item Vier! Hier kommt die Sonne
+  \item Funf! Hier kommt die Sonne
+  \item Sechs! Hier kommt die Sonne
+  \item Sieben! Sie ist der hellste Stern von allen
+  \item Acht! Hier kommt die Sonne
+\end{enumerate}
+
+И не нумерованный
+\begin{itemize}
+  % Отступы можно не задавать руками, тогда они достаточно широкие
+  \item Раз
+  \item Двас
+\end{itemize}
+
+\pagebreak % Разрыв страницы
+
+\Section{Про таблицы}
+
+Можно использовать \texttt{array}. Он работает в math-mode (окружать долларами):
+
+$$
+\begin{array}{|r|c} % если сделать |r|c| будет более красиво!
+  \hline
+  \mbox{Номер группы} & \mbox{Имя повелителя}\\
+  \hline
+  1 & \mbox{Антон}\\
+  2 & \mbox{Рома}\\
+  \hline
+  3 & \mbox{Сережа}\\
+  \hline
+\end{array}
+$$
+
+Можно использовать \texttt{tabular}:\\ % обратите внимание на \\
+
+\begin{tabular}{|l|p{1cm}|p{1cm}|}
+  \hline
+    \multicolumn{3}{|c|}{Header} \\
+  \hline
+    $\int\limits_0^1xdx$ &first first first&second second second\\
+  \hline
+    p&q&r \\
+  \hline
+\end{tabular}\\	% обратите внимание на \\
+
+\Section{Основные формулы}
+
+$\alpha, \beta, \epsilon, \varepsilon, \phi, \varphi$
+
+$\rightarrow, \Rightarrow, \to, \leftrightarrow, \Leftrightarrow$
+
+$\sum, \int, \sum\limits_{i=1}^{n}i^2, \int\limits_{a}^{b}x dx, \prod, \cap, \cup, \circ, \bullet$
+
+$\frac{\frac{a}{b}+c}{n^2+x^3+\sum y_i}$
+
+\Section{Help}
+
+Если хочется читать про tex, то
+
+\url{https://en.wikibooks.org/wiki/LaTeX}
+
+\url{https://en.wikibooks.org/wiki/LaTeX/Basics}
+
+\url{https://en.wikibooks.org/wiki/LaTeX/Mathematics}
+
+\url{https://en.wikibooks.org/wiki/LaTeX/Mathematics#List\_of\_Mathematical\_Symbols}
+
+Гуглим книжку: \url{https://www.google.ru/?q=tex,Lvovskiy}
+
+\vspace{1em}
+\noindent \underline{\hbox to 1\textwidth{{ } \hfil{ } \hfil{ } }} % Горизонтальная линия
+\vspace{1em}
+
+На сегодня хватит. Удачного знакомство с \hologo{LaTeX}.
+
+\end{document}

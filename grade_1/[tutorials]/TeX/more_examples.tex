@@ -1,0 +1,67 @@
+\documentclass[11pt,a4paper,oneside]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+
+% Делаем лист нужного размера
+\textwidth=192mm
+\textheight=272mm
+\hoffset=-35mm
+\voffset=-35mm
+
+\renewcommand{\t}{\texttt}    % моноширинный текст
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+
+\def\SO{\Rightarrow}         % =>
+\def\EQ{\Leftrightarrow}     % <=>
+\newcommand{\q}[1]{\langle #1 \rangle} % <x>
+
+\begin{document}
+
+\begin{center}
+Разные Математические значки: \\
+$\t{Пример:} \q{a} \le b \ge c \SO x \EQ y$ 
+\end{center}
+
+$$
+ \pm                  \cap                \diamond                    \oplus      
+ \mp                  \cup                \bigtriangleup              \ominus     
+ \times               \uplus              \bigtriangledown            \otimes     
+ \div                 \sqcap              \triangleleft               \oslash     
+ \ast                 \sqcup              \triangleright              \odot       
+ \star                \vee                \lhd^b                    \bigcirc    
+ \circ                \wedge              \rhd^b                    \dagger     
+ \bullet              \setminus           \unlhd^b                  \ddagger    
+ \cdot                \wr                 \unrhd^b                  \amalg      
+$$
+
+$$
+ \leq                 \geq                \equiv              \models       
+ \prec                \succ               \sim                \perp         
+ \preceq              \succeq             \simeq              \mid          
+ \ll                  \gg                 \asymp              \parallel     
+ \subset              \supset             \approx             \bowtie       
+ \subseteq            \supseteq           \cong               \Join^b
+ \sqsubset^b        \sqsupset^b       \neq                \smile        
+ \sqsubseteq          \sqsupseteq         \doteq              \frown        
+ \in                  \ni                 \propto             =             
+ \vdash               \dashv              <                   >             
+$$
+
+$$
+ \ldots               \cdots              \vdots              \ddots        
+ \aleph               \prime              \forall             \infty        
+ \hbar                \emptyset           \exists             \Box^b      
+ \imath               \nabla              \neg                \Diamond^b  
+ \jmath               \surd               \flat               \triangle     
+ \ell                 \top                \natural            \clubsuit     
+ \wp                  \bot                \sharp              \diamondsuit  
+ \Re                  \|                  \backslash          \heartsuit    
+ \Im                  \angle              \partial            \spadesuit    
+ \mho^b             .                   |
+$$
+
+\end{document}
