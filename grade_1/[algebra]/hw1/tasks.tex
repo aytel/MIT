@@ -1,0 +1,270 @@
+\documentclass[12pt]{article}
+
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{graphicx}
+\usepackage{amsthm,amsmath,amssymb}
+\usepackage[russian,colorlinks=true,urlcolor=red,linkcolor=blue]{hyperref}
+\usepackage{enumerate}
+\usepackage{datetime}
+\usepackage{minted}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{color}
+\usepackage{verbatim}
+
+\def\NAME{Асимптотика и рекуррентные соотношения}
+\def\DATE{6 сентября}
+\def\CURNO{\NO\t{1}}
+
+\parskip=0em
+\parindent=0em
+
+\sloppy
+\voffset=-20mm
+\textheight=235mm
+\hoffset=-25mm
+\textwidth=180mm
+\headsep=12pt
+\footskip=20pt
+
+\setcounter{page}{0}
+\pagestyle{empty}
+
+% Основные математические символы
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\heart}{\mathalpha}{extraup}{86}
+\newcommand{\N}{\mathbb{N}}   % Natural numbers
+\newcommand{\R}{\mathbb{R}}   % Ratio numbers
+\newcommand{\Z}{\mathbb{Z}}   % Integer numbers
+\def\EPS{\varepsilon}         %
+\def\SO{\Rightarrow}          % =>
+\def\EQ{\Leftrightarrow}      % <=>
+\def\t{\texttt}               % mono font
+\def\c#1{{\rm\sc{#1}}}        % font for classes NP, SAT, etc
+\def\O{\mathcal{O}}           %
+\def\NO{\t{\#}}               % #
+\renewcommand{\le}{\leqslant} % <=, beauty
+\renewcommand{\ge}{\geqslant} % >=, beauty
+\def\XOR{\text{ {\raisebox{-2pt}{\ensuremath{\Hat{}}}} }}
+\newcommand{\q}[1]{\langle #1 \rangle}               % <x>
+\newcommand\URL[1]{{\footnotesize{\url{#1}}}}        %
+\newcommand{\sfrac}[2]{{\scriptstyle\frac{#1}{#2}}}  % Очень маленькая дробь
+\newcommand{\mfrac}[2]{{\textstyle\frac{#1}{#2}}}    % Небольшая дробь
+\newcommand{\score}[1]{{\bf\color{red}{(#1)}}}
+
+% Отступы
+\def\makeparindent{\hspace*{\parindent}}
+\def\up{\vspace*{-0.3em}}
+\def\down{\vspace*{0.3em}}
+\def\LINE{\vspace*{-1em}\noindent \underline{\hbox to 1\textwidth{{ } \hfil{ } \hfil{ } }}}
+%\def\up{\vspace*{-\baselineskip}}
+
+\lhead{Алгоритмы, осень 2017/18}
+\chead{}
+\rhead{Практика \CURNO. \NAME.}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\lfoot{}
+\cfoot{\thepage\t{/}\pageref*{LastPage}}
+\rfoot{}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newenvironment{MyList}[1][4pt]{
+  \begin{enumerate}[1.]
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{#1}
+}{       
+  \end{enumerate}
+}
+\newenvironment{InnerMyList}[1][0pt]{
+  \vspace*{-0.5em}
+  \begin{enumerate}[a)]
+  \setlength{\parskip}{#1}
+  \setlength{\itemsep}{0pt}
+}{
+  \end{enumerate}
+}
+
+\newcommand{\Section}[1]{
+  \refstepcounter{section}
+  \addcontentsline{toc}{section}{\arabic{section}. #1} 
+  %{\LARGE \bf \arabic{section}. #1} 
+  {\LARGE \bf #1} 
+  \vspace*{1em}
+  \makeparindent\unskip
+}
+\newcommand{\Subsection}[1]{
+  \refstepcounter{subsection}
+  \addcontentsline{toc}{subsection}{\arabic{section}.\arabic{subsection}. #1} 
+  {\Large \bf \arabic{section}.\arabic{subsection}. #1} 
+  \vspace*{0.5em}
+  \makeparindent\unskip
+}
+
+% Код с правильными отступами
+\newenvironment{code}{
+  \VerbatimEnvironment
+
+  \vspace*{-0.5em}
+  \begin{minted}{c}}{
+  \end{minted}
+  \vspace*{-0.5em}
+
+}
+
+% Формулы с правильными отступами
+\newenvironment{smallformula}{
+ 
+  \vspace*{-0.8em}
+}{
+  \vspace*{-1.2em}
+  
+}
+\newenvironment{formula}{
+ 
+  \vspace*{-0.4em}
+}{
+  \vspace*{-0.6em}
+  
+}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{brown}{rgb}{0.5,0.5,0}
+\newcommand{\red}[1]{{\color{red}{#1}}}
+\newcommand{\dkgreen}[1]{{\color{dkgreen}{#1}}}
+
+\begin{document}
+
+\renewcommand{\dateseparator}{--}
+\begin{center}
+  {\Large\bf 
+   Первый курс, осенний семестр 2017/18\\
+   Практика по алгоритмам \CURNO\\
+   \vspace*{0.5em} 
+   \NAME \\
+   \vspace*{0.5em} 
+   \DATE}\\
+  \vspace{0.5em}
+  {Собрано {\today} в {\currenttime}}
+\end{center}
+
+\vspace{-1em}
+\LINE
+\vspace{1em}
+
+%\tableofcontents
+
+%\pagebreak
+\pagestyle{fancy}
+
+\vspace*{0.5em}
+\Section{Домашнее задание}
+
+\Subsection{Обязательная часть}
+
+\begin{MyList}[6pt]
+
+  \item \score{2.5} {\bf Истина или ложь?}, \score{0.5} за каждый пункт\\
+    Проверьте корректность, докажите.
+    \begin{InnerMyList}
+      \setcounter{enumii}{11}
+      \item $n^{\log n} = \O(1.1^n)$
+      \item $\frac{n^3}{n^2 + n \log n} = \O(n \log n)$
+      \item $f(n) = \O(f(\frac{n}{2}))$
+      \item $f(n) \pm o(f(n)) = \Theta(f(n))$
+      \item $\log n! = \Theta(n \log n)$
+    \end{InnerMyList}
+
+  \item \score{2.5} {\bf Рекуррентность}, \score{0.5} за каждый пункт\\
+    Во всех задачах предполагается, что $\forall x \le 1, T(x) = 1$
+    \begin{InnerMyList}
+      \setcounter{enumii}{6}
+      \item $T(n) = T(\mfrac{n}{2}) + T(\mfrac{n}{3}) + n$
+      \item $T(n) = 4T(\mfrac{n}{2}) + n \log^2 n$
+      \item $T(n) = 2T(\mfrac{n}{3}) + 1$
+      \item $T(n) = T(n - 1) + T(n - 2)$
+      \item $T(n) = T(n - 1) + n$
+    \end{InnerMyList}
+
+  \item \score{3} {\bf Заполнить табличку}\\
+    $A = O(B)$? $A = o(B)$? и т.д.
+    За каждый неправильный ответ \score{${-}0.1$} балл.
+$$
+  \begin{array}{|cc|c|c|c|c|c|}
+    \hline
+    A & B & O & o & \Theta & \omega & \Omega \\
+    \hline
+    n & n^2 & + & + & - & - & - \\
+    \log^k n & n^{\epsilon} & & & & & \\
+    n^k & c^n & & & & & \\
+    \sqrt{n} & n^{\sin n} & & & & & \\
+    2^n & 2^{n \slash 2} & & & & & \\
+    n^{\log m} & m^{\log n} & & & & & \\
+    \log (n!) & \log(n^n) & & & & & \\
+    \hline
+  \end{array}
+$$
+  \item \score{6} {\bf Упорядочить 30 функций в порядке возрастания}\\
+    Если какие-то функции равны ($f = \Theta(g)$), указать это.
+    Здесь $\log n$ --- двоичный логарифм, $\ln n$ --- натуральный логарифм.
+    За каждый неправильный ответ \score{${-}0.2$} балла.
+
+$$
+  \begin{array}{cccccc}
+    \log(\log^* n) & 2^{\log^* n} & (\sqrt{n})^{\log n} & n^2 & n! & (\log n)! \\
+    (3 \slash 2)^n & n^3 & \log^2 n & \log n! & 2^{2^n} & n^{1 \slash \log n} \\
+    \ln \ln n & \log^* n & n \cdot 2^n & n^{\log \log n} & \ln n & 1 \\
+    2^{\ln n} & (\log n)^{\log n} & e^n & 4^{\log n} & (n + 1)! & \sqrt{\log n} \\
+    \log^* \log n & 2^{\sqrt{2 \log n}} & n & 2^n & n \log n & 2^{2^{n + 1}}          
+  \end{array}
+$$
+    Примечание: $\log^*(n) = \left\{
+    \begin{array}{ll}
+        0 & \text{ если } n \leq 1;\\
+        1 + \log^*(\log n) & \text{ иначе}
+    \end{array}
+    \right.$
+
+%\pagebreak
+  \item \score{1} {\bf Посчитать точно}, \score{0.5} за каждый пункт
+    \begin{InnerMyList}
+      \item $\sum_{k = 0}^\infty \frac{1}{2^k}$ 
+      \item $\sum_{k = 0}^\infty \frac{(-1)^k}{2^k}$
+    \end{InnerMyList}
+
+\end{MyList}
+
+%*\vspace{0.5em}
+\pagebreak
+\vspace*{0.5em}
+\Subsection{Дополнительная часть}
+
+\begin{MyList}[8pt]
+
+  \item \score{1} {\bf Истина или ложь?}, \score{0.5} за каждый пункт\\
+    Проверьте корректность, докажите.
+    \begin{InnerMyList}
+      \setcounter{enumii}{16}
+      \item $n^n = \O(n!)$
+      \item $n \log n - \log n! = \Theta(n)$
+    \end{InnerMyList}
+
+  \item \score{1.5} {\bf Рекуррентность}, \score{0.5} за каждый пункт\\
+    Во всех задачах предполагается, что $\forall x \le 1, T(x) = 1$.
+    \begin{InnerMyList}
+      \setcounter{enumii}{11}
+      \item $T(n) = T(n - 1) + T(n - 2) + 1$
+      \item $T(n) = T(n - 1) + T(n - 3)$
+      \item $T(n) = T(\mfrac{n}{2}) \cdot T(\mfrac{n}{3})$, при этом $\forall x \le 3 \ T(x) = 2$
+    \end{InnerMyList}
+
+  \item \score{1} {\bf Реккурентность и практика}\\
+    Дайте наиболее точный ответ, докажите наиболее точные верхние и нижние оценки для
+    $T(n) = T(n-1) + T(n^{1/3})$.
+
+\end{MyList}
+
+\end{document}
