@@ -1,32 +1,26 @@
-%
-% Проверьте, что вы сохранили файл в кодировке utf8
-%
+\documentclass[12pt]{article} 
 
-\documentclass[12pt]{article} % 12 -- размер шрифта
-
-\usepackage{cmap} % Чтобы можно было копировать русский текст из pdf
+\usepackage{cmap} 
 \usepackage[T2A]{fontenc}
 \usepackage[russian,english]{babel}
-\usepackage[utf8]{inputenc} % Проверьте, что кодировка файла -- тоже utf8
-\usepackage{amsmath, amssymb} % Чтобы юзать математические символы
+\usepackage[utf8]{inputenc} 
+\usepackage{amsmath, amssymb} 
 
-\usepackage{hologo} % Логотип LaTex
-\usepackage[russian]{hyperref} % http ссылки на внешние источники
+\usepackage{hologo} 
+\usepackage[russian]{hyperref} 
 
-% Меняем размер листа, можно не менять
 \textwidth=160mm
 \hoffset=-15mm
 \textheight=240mm
 \voffset=-20mm
 
-\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} % Фиксим багу с отступом в начале section, заодно пример собственных функций
+\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} 
 
 \begin{document}
 
-А еще тут есть пронумерованный списочек.
 \begin{enumerate}
-  \setlength{\parskip}{0pt} % Отступ перед списком
-  \setlength{\itemsep}{0pt} % Отступ между строками списка
+	\setlength{\parskip}{0pt} 
+	\setlength{\itemsep}{0pt} 
 \end{enumerate}
 
 \end{document}
