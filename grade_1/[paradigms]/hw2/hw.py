@@ -12,7 +12,6 @@ def hsh(filename):
         while up:
             h.update(up)
             up = filename.read(SZ)
-    filename.close()
     return h.hexdigest()
 
 if __name__ == '__main__':
@@ -23,13 +22,11 @@ if __name__ == '__main__':
             path = os.path.join(direct, file)
             if file[0] == '~' or file[0] == '.' or os.path.islink(path):
                 continue
-            cur = hsh(direct + '\\' + file)
+            cur = hsh(path)
             if cur not in diff:
                 diff[cur] = []
-            diff[cur].append((direct, file))
+            diff[cur].append(file + ':' + direct)
     for _, cl in diff.items():
         if len(cl) < 2:
             continue
-        for direct, file in cl:
-            print(file, ':', direct, sep='', end=' / ')
-        print()
+        print('/'.join(cl))
