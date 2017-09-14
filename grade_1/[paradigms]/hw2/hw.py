@@ -25,8 +25,8 @@ if __name__ == '__main__':
             cur = hsh(path)
             if cur not in diff:
                 diff[cur] = []
-            diff[cur].append(file + ':' + direct)
+            diff[cur].append(path)
     for _, cl in diff.items():
         if len(cl) < 2:
             continue
-        print('/'.join(cl))
+        print(':'.join(cl))
