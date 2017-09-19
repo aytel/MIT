@@ -4,13 +4,13 @@ clean:
 
 CF = -I include -c 
 
-./bin/algorithm.o: ./src/algorithm.c ./bin/util.o
+./bin/algorithm.o: ./src/algorithm.c ./bin/util.o ./include/util.h
 	gcc $(CF)$ ./src/algorithm.c -o ./bin/algorithm.o
 ./bin/io.o: ./src/io.c
 	gcc $(CF)$ ./src/io.c -o ./bin/io.o
-./bin/util.o: ./src/util.c ./bin/io.o
+./bin/util.o: ./src/util.c ./bin/io.o ./include/io.h
 	gcc $(CF)$ ./src/util.c -o ./bin/util.o
-./bin/main.o: ./src/main.c ./bin/algorithm.o
+./bin/main.o: ./src/main.c ./bin/algorithm.o ./include/algorithm.h
 	gcc $(CF)$ ./src/main.c -o ./bin/main.o
 bin: 
 	mkdir bin
