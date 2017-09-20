@@ -2,10 +2,10 @@ import numpy as np
 
 
 def mul(a, b):
-    lngth = len(a)
-    if lngth == 1:
-        return a * b
-    hf = lngth // 2
+    length = len(a)
+    if length <= 128:
+        return np.dot(a, b)
+    hf = length // 2
     a11 = a[:hf, :hf]
     a12 = a[:hf, hf:]
     a21 = a[hf:, :hf]
@@ -28,10 +28,11 @@ def mul(a, b):
     return np.vstack([np.hstack([res11, res12]), np.hstack([res21, res22])])
 
 
-def read_matrix(mtrx, n):
+def read_matrix(n, sz):
+    mtrx = np.zeros((sz, sz), dtype=np.int)
     for i in range(n):
         mtrx[i][:n] = np.array(list(map(int, input().split())), int)
-    return
+    return mtrx
 
 
 def print_matrix(mtrx, n):
@@ -45,12 +46,8 @@ if __name__ == '__main__':
     while (sz < n):
         sz *= 2
 
-    a = np.zeros((sz, sz), dtype=np.int)
-    b = np.zeros((sz, sz), dtype=np.int)
-    c = np.zeros((sz, sz), dtype=np.int)
-
-    read_matrix(a, n)
-    read_matrix(b, n)
+    a = read_matrix(n, sz)
+    b = read_matrix(n, sz)
 
     c = mul(a, b)
 
