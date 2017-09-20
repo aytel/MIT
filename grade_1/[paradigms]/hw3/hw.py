@@ -25,8 +25,7 @@ def mul(a, b):
     res12 = p3 + p5
     res21 = p2 + p4
     res22 = p1 - p2 + p3 + p6
-    res = np.vstack([np.hstack([res11, res12]), np.hstack([res21, res22])])
-    return res
+    return np.vstack([np.hstack([res11, res12]), np.hstack([res21, res22])])
 
 
 def read_matrix(mtrx, n):
