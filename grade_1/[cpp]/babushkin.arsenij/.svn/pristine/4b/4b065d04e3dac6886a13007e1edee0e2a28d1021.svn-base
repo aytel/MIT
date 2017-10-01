@@ -37,9 +37,9 @@ void show_all_positions(struct i_list * list) {
 	while (cur != NULL) {	
 		struct p_node * item = container_of(cur, struct p_node, node);
 		printf("(%d %d) ", item->x, item->y);
+		printf("\n");
 		cur = cur->next;
 	}
-	printf("\n");
 	return;
 }
 
@@ -53,7 +53,13 @@ void remove_all_positions(struct i_list * list) {
 }
 
 void show_len(struct i_list * list) {
-	printf("%d\n", get_length(list));
+	int cn = 0;
+	struct i_node * cur = list->head;
+	while (cur != NULL) {
+		cn++;
+		cur = cur->next;
+	}
+	printf("%d\n", cn);
 	return;
 }
 
@@ -61,7 +67,14 @@ int main() {
 	struct i_list l;
 	init_list(&l);
 
-	char s[100];
+	/*add_position(&l, 1, 2);
+	add_position(&l, 3, 6);
+	show_all_positions(&l);
+	remove_position(&l, 1, 2);
+	show_all_positions(&l);
+	return 0;*/
+
+	char * s = (char *)(malloc(sizeof(char *)));
 	while (1) {
 		scanf("%s", s);
 		//printf("%s ", s);

@@ -61,7 +61,14 @@ int main() {
 	struct i_list l;
 	init_list(&l);
 
-	char s[100];
+	/*add_position(&l, 1, 2);
+	add_position(&l, 3, 6);
+	show_all_positions(&l);
+	remove_position(&l, 1, 2);
+	show_all_positions(&l);
+	return 0;*/
+
+	char * s = (char *)(malloc(sizeof(char)));
 	while (1) {
 		scanf("%s", s);
 		//printf("%s ", s);

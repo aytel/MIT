@@ -28,13 +28,3 @@ void remove_node(struct i_list * list, struct i_node * node) {
 	//free(node);
 	return;
 };
-
-int get_length(struct i_list * list) {
-	int cn = 0;
-	struct i_node * cur = list->head;
-	while (cur != NULL) {
-		cn++;
-		cur = cur->next;
-	}
-	return cn;
-};
