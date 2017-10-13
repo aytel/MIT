@@ -1,0 +1,47 @@
+#include "clist.h"
+
+void init_list(struct i_list * list) {
+	list->head = NULL;
+	return;
+};
+
+void add_node(struct i_list * list, struct i_node * node) {
+	if (list->head == NULL) {
+		list->head = node;
+		node->next = node->prev = NULL;
+	} else {
+		list->head->prev = node;
+		node->next = list->head;
+		list->head = node;
+		list->head->prev = NULL;
+	}
+	return;
+};
+
+void remove_node(struct i_list * list, struct i_node * node) {
+	if (node->prev != NULL) 
+		node->prev->next = node->next;
+	if (node->next != NULL)
+		node->next->prev = node->prev;
+	if (list->head == node)
+		list->head = node->next;
+	return;
+};
+
+int get_length(struct i_list * list) {
+	int cn = 0;
+	struct i_node * cur = list->head;
+	while (cur != NULL) {
+		cn++;
+		cur = cur->next;
+	}
+	return cn;
+};
+
+void apply(struct i_node * node, void (*op)(struct i_node * node, void * arg), void * arg) {
+	if (node == NULL)
+		return;
+	apply(node->next, op, arg);
+	op(node, arg);
+}
+
