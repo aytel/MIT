@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phonebook>
+    <human name="Alsu Stepanovna Solodnikova">
+        <phone>5261802157</phone>
+        <phone>175169909980982022</phone>
+        <phone>2034643130036015389</phone>
+        <phone>66186437177737</phone>
+        <phone>485428440006267608</phone>
+        <phone>16004690847211352550</phone>
+        <phone>306760289004711302</phone>
+        <phone>18853160755</phone>
+        <phone>45307068060732740</phone>
+        <phone>408731429466310</phone>
+    </human>
+    <human name="Yaroslava Olegovna Grigoryeva">
+        <phone>51272715921</phone>
+        <phone>5032763265139813</phone>
+        <phone>772412510583699220</phone>
+        <phone>3041729669174</phone>
+        <phone>21591620242471430494</phone>
+        <phone>97288333496844305362</phone>
+        <phone>7944425049628</phone>
+        <phone>938429267219589049</phone>
+        <phone>7549040042254251405</phone>
+        <phone>49417897786448593661</phone>
+    </human>
+</phonebook>
