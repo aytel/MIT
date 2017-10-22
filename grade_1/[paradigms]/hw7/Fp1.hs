@@ -29,4 +29,4 @@ concat' [] a = a
 
 quicksort' :: Ord a => [a] -> [a]
 quicksort' [] = []
-quicksort' (x:y) = concat' (concat' (quicksort'(filter' (< x) y)) (quicksort'(filter' (== x) y))) (concat' (x:[]) (quicksort'(filter' (> x) y)))
+quicksort' (x:y) = concat' (concat' (quicksort'(filter' (< x) y)) (filter' (== x) y)) (concat' (x:[]) (quicksort'(filter' (> x) y)))
