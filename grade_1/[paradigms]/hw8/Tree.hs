@@ -38,19 +38,19 @@ check left right
 	| ((rand left right) `mod` ((size left) + (size right) - 1)) < (size left) = False
 	| otherwise = True
 
-split :: Ord key => DT key val -> key -> [DT key val]
-split Nil k = (Nil:Nil:[])
+split :: Ord key => DT key val -> key -> (DT key val, DT key val)
+split Nil k = (Nil, Nil)
 split (Node key val sz left right) k
-	| key == k = (left:right:[])
-	| key < k = (Node key val (sz - (size sc1)) left fr1 : sc1 : [])
-	| key > k = (fr2 : Node key val (sz - (size fr2)) sc2 right : [])
+	| key == k = (left, right)
+	| key < k = (Node key val (sz - (size fst_right)) left fst_right, snd_right)
+	| key > k = (fst_left, Node key val (sz - (size snd_left)) snd_left right)
 	where
-		sp1 = split right k
-		fr1 = head sp1
-		sc1 = head (tail sp1)
-		sp2 = split left k
-		fr2 = head sp2
-		sc2 = head (tail sp2)
+		split_right = split right k
+		fst_right = fst split_right
+		snd_right = snd split_right
+		split_left = split left k
+		fst_left = fst split_left
+		snd_left = snd split_left
 
 merge :: Ord key => DT key val -> DT key val -> DT key val
 merge Nil right = right
@@ -63,15 +63,15 @@ merge left right
 		mr2 = merge left (lch right)
 
 insert :: Ord key => key -> val -> DT key val -> DT key val
-insert key val tree = merge fr (merge (Node key val 1 Nil Nil) sc)
+insert key val tree = merge fs (merge (Node key val 1 Nil Nil) sn)
 	where
 		sp = split tree key
-		fr = head sp
-		sc = head (tail sp)
+		fs = fst sp
+		sn = snd sp
 
 delete :: Ord key => key -> DT key val -> DT key val
-delete key tree = merge fr sc
+delete key tree = merge fs sn
 	where
 		sp = split tree key
-		fr = head sp
-		sc = head (tail sp)
+		fs = fst sp
+		sn = snd sp
