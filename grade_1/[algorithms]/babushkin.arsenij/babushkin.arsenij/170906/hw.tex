@@ -1,0 +1,117 @@
+%
+% Проверьте, что вы сохранили файл в кодировке utf8
+%
+
+\documentclass[12pt]{article} % 12 -- размер шрифта
+
+\usepackage{cmap} % Чтобы можно было копировать русский текст из pdf
+\usepackage[T2A]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage[utf8]{inputenc} % Проверьте, что кодировка файла -- тоже utf8
+\usepackage{amsmath, amssymb} % Чтобы юзать математические символы
+
+\usepackage{hologo} % Логотип LaTex
+\usepackage[russian]{hyperref} % http ссылки на внешние источники
+
+% Меняем размер листа, можно не менять
+\textwidth=160mm
+\hoffset=-15mm
+\textheight=240mm
+\voffset=-20mm
+
+\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} % Фиксим багу с отступом в начале section, заодно пример собственных функций
+
+\begin{document}
+
+Бабушкин А.
+
+\section{Домашнее задание}
+
+\begin{enumerate}
+  \setlength{\parskip}{0pt} % Отступ перед списком
+  \setlength{\itemsep}{0pt} % Отступ между строками списка
+  \item ~\\
+	l) $\log(n^{\log n}) = \log n * \log \log n < \log^{2} n < n = \log_{2}1.1 \cdot \log (1.1^{n}) \to $ True. \\
+	m) $\frac {n^3}{n^2 + n \log n} = \frac {n^3}{n^2 + o(n^2)} = \frac {n^3}{\Theta(n^2)} = \Theta (\frac {n^3}{n^2}) = \Theta ({n}) < {O} (n \log n) \to $ True. \\
+	n) Пусть $f(n) = 2^n$. Тогда $f(n) = (f({\frac{n}{2}}))^2, x \ne O(x^2) \to$ False. \\
+	o) $f(n) - o(f(n)) \le f(n) \to f(n) - 0(f(n)) = O(f(n)) \\
+ f(n) - o(f(n)) \ge f(n) - \frac {f(n)}{C} =  \frac {1 - C}{C} f(n) \to \frac {C}{1 - C}(f(n) - o(f(n)) \ge f(n) \to f(n) - o(f(n)) = \Omega(f(n)) \to $ True. Для $f(n) + o(f(n))$ аналогично.\\
+	p) $2^{\log n!} = n! < n^n = 2^{n \log n} \to \log n! < n \log n \to \log n! = O(n \log n)$. \\
+	Теперь докажем $\Omega$. $\log n! = \sum {\log i} : i \le n$. Возьмём первые $\frac {n}{2}$ из них. Каждое из слагаемых не меньше $\log \frac {n}{2} = \log (n - 1)$, то есть их сумма $\ge \frac {n}{2} (\log n - 1) = \Theta (n \log n) \to $ True.
+  \item ~\\
+	g) Докажем, что $T(n) = \Theta(n)$ по индукции. База очевидна, теперь переход. Пусть это верно $\forall i < n$. Сначала докажем $O$. $T(n) = T(\frac {n}{2}) + T(\frac {n}{3}) + n \le C\frac{n}{2} + C\frac {n}{3} + n = \frac {(5C + 6)}{6}n $. Если $\exists C : \frac {5C + 6}{6}  \le C$, то мы победили. Это равенство верно для $C \ge 6 \to$ True. $\Omega$ доказывается точно так же, только там нужно будет $\exists C : \frac {5C + 6}{6} \ge C \to C \le 6$. \\
+	h) $T(n) = \Theta(n^2)$ по мастер-теореме ($a= 4, b = 2, c = 1, d = 2$). \\
+	i) $T(n) = \Theta(n^{\log_{3}{2}})$ по мастер-теореме ($a= 2, b = 3, c = 0, d = 0$). \\
+	Если без обобщённой мастер-теоремы, то можно так: \\
+	$\Theta(n^2) = 4T(\frac{n}{2}) + n < 4T(\frac{n}{2}) + n\log^2n \to T(n) = \Omega(n^2)$. Докажем $O$. \\
+	$T(n) < 4T(\frac{n}{2}) + n^{\frac{3}{2}} = \Theta(n^2)$, (последнее равенство -- по обычной мастер-теореме).
+	$\to T(n) = O(n^2)$, \#. \\
+	j) $T(n) = \Theta(n^{\frac {\sqrt{5} + 1}{2}})$, т.к. это числа Фибоначчи. \\
+	k) $T(n) = T(n - 1) + n \to T(n) = \frac {n(n + 1)}{2} = \Theta(n^2)$.
+  \item ~\\
+ $\begin{array}{|cc|c|c|c|c|c|}
+    \hline
+    A & B & O & o & \Theta & \omega & \Omega \\
+    \hline
+    n & n^2 & + & + & - & - & - \\
+    \log^k n & n^{\epsilon} & + & + & - & - & - \\
+    n^k & c^n & + & + & - & - & - \\
+    \sqrt{n} & n^{\sin n} & - & - & - & - & - \\
+    2^n & 2^{n \slash 2} & - & - & - & + & + \\
+    n^{\log m} & m^{\log n} & + & - & + & - & + \\
+    \log (n!) & \log(n^n) & + & - & - & - & + \\
+    \hline
+  \end{array}$
+  \vspace*{0.7em}
+  \item Разобьём на классы эквивалентности (если функции вместе, то они $\Theta$ друг от друга) и упорядочим по возрастанию.\\
+	\begin{enumerate}
+	  \setlength{\parskip}{0pt} % Отступ перед списком
+	  \setlength{\itemsep}{0pt} % Отступ между строками списка
+	  \item $1, n^{1/\log n}$ \\
+	  \item $\log (\log^* n)$ \\
+	  \item $\log^* n, \log^* \log n$ \\
+	  \item $2^{\log^* n}$ \\
+	  \item $\ln \ln n$ \\
+	  \item $\sqrt{\log n}$ \\
+	  \item $\ln n$ \\
+	  \item $\log^2 n$ \\
+	  \item $2^{\sqrt{2 \log n}}$ \\
+	  \item $2^{\ln n}$ \\
+	  \item $n$ \\
+	  \item $n \log n, \log n!$ \\
+	  \item $n^2, 4^{\log n}$ \\
+	  \item $n^3$ \\
+	  \item $(\log n)!$ \\
+	  \item $n^{\log \log n}, \log n^{\log n}$ \\
+	  \item $ (\sqrt n)^{\log n} $ \\
+	  \item $(\frac{3}{2})^n$ \\
+	  \item $2^n$ \\
+	  \item $n \cdot 2^n$ \\
+	  \item $e^n$ \\
+	  \item $n!$\\
+	  \item $(n + 1)!$ \\
+	  \item $2^{2^n}$ \\
+	  \item $2^{2^{n+1}}$ \\
+	\end{enumerate}
+  \item Сумма бесконечной геометрической прогрессии $ = \frac {b}{1 - q}$.\\
+	a) $b = 1, q = \frac {1}{2} \to$ ответ $ = 2$. \\
+	b) Это сумма двух прогрессий. У одной $b = 1, q = \frac {1}{4}$, у другой $b = -\frac{1}{2}, q = \frac{1}{4} \to $ ответ $ = \frac {2}{3}$. \\
+\end{enumerate}
+
+\section{Дополнительные задачи}
+
+\begin{enumerate}
+  \setlength{\parskip}{0pt} % Отступ перед списком
+  \setlength{\itemsep}{0pt} % Отступ между строками списка
+  \item ~\\
+	q) False. Докажем о/п. Пусть $\exists C : \forall n > N n^n \le Cn!$. Подставим в качестве $n X = max([C] + 1, N)$. \\
+	$X^X < CX!$, поделим на $X$ слева и на $C$ справа. $X > C \to$ если после этого левая часть будет $\ge$ правой, то до такого деления она была $>$. \\
+	$X^{X - 1} < X!$, в правой части можно убрать из произведения $1$, тогда останется $X - 1$ множителей $\le X$, а слева $X - 1$ множителей $X$. Значит, левая часть $>$ правой. Противоречие. \# \\
+  \item ~\\
+	l) Докажем, что $\forall  T(n) = 2F_{n} - 1$, где $F_{n}$ -- $n$-ое число Фибоначчи. Очевидно, для $n = 0, n = 1$ выполняется ($1 = 2 \cdot  1 - 1$), теперь переход. \\
+	$T(n) = T(n - 1) + T(n - 2) + 1 = 2F_{n - 1} - 1 + 2F_{n - 2} -1 + 1 = 2F_{n} - 1 \to$ True. Тогда $T(n) = \Theta((\frac{\sqrt{5}+1}{2})^n)$. \\
+	m) По теореме об эксп. рек. соотн. $T(n) = \Theta(\alpha^n)$, где $\alpha$ -- корень уравнения $1 = \alpha^{-1} + \alpha^{-3} \Leftrightarrow \alpha^{3} - \alpha^{2} - 1 = 0$. Можно взять формулы Кардано, можно бинпоиск на отрезке $[1, +\infty)$, ответ будет $\approx1.4656$.
+
+\end{enumerate}
+
+\end{document}

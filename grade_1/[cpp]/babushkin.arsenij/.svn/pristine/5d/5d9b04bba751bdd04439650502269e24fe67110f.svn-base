@@ -1,0 +1,210 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "bmp.h"
+
+#define PIXEL_SIZE(pic) (pic->bih.biBitCount / 8)
+#define ROW_LEN(pic) (((pic->bih.biWidth * PIXEL_SIZE(pic) + 3) / 4) * 4)
+
+int load_bmp(PBMPIMAGE pic, FILE * file) {
+	fread(&pic->bfh, sizeof(pic->bfh), 1, file);
+	fread(&pic->bih, sizeof(pic->bih), 1, file);
+
+	int hor = ROW_LEN(pic);
+	int ver = pic->bih.biHeight;
+	pic->data = (unsigned char **)malloc(ver * sizeof(unsigned char *));
+	if (!pic->data)
+		return 1;
+	for (int i = 0; i < ver; i++) {
+		pic->data[i] = (unsigned char *)calloc(hor, sizeof(unsigned char));
+		if (!pic->data[i])
+			return 1;
+		fread(pic->data[i], sizeof(unsigned char), hor, file);
+	}
+	return 0;
+}
+
+void save_bmp(PBMPIMAGE pic, FILE * file) {
+	fwrite(&pic->bfh, sizeof(pic->bfh), 1, file);
+	fwrite(&pic->bih, sizeof(pic->bih), 1, file);
+
+	int hor = ROW_LEN(pic);
+	int ver = pic->bih.biHeight;
+	for (int i = 0; i < ver; i++)
+		fwrite(pic->data[i], sizeof(unsigned char), hor, file);
+	return;
+}
+
+int crop_bmp(PBMPIMAGE dest, PBMPIMAGE src, LONG l, LONG r, LONG d, LONG u) {
+	if (l >= r || d >= u || u > src->bih.biHeight || r > src->bih.biWidth)
+		return 2;
+
+	d = src->bih.biHeight - d;
+	u = src->bih.biHeight - u;
+	swap(d, u);
+
+	memcpy(&dest->bfh, &src->bfh, sizeof(src->bfh));
+	memcpy(&dest->bih, &src->bih, sizeof(src->bih));
+	dest->bih.biHeight = u - d;
+	dest->bih.biWidth = r - l;
+	int hor = ROW_LEN(dest);
+	int ver = dest->bih.biHeight;
+	dest->bih.biSizeImage = hor * ver;
+	dest->bfh.bfSize = dest->bih.biSizeImage + sizeof(dest->bfh) + sizeof(dest->bih);
+	dest->data = (unsigned char **)malloc(ver * sizeof(unsigned char *));
+	if (!dest->data)
+		return 1;
+	for (int i = 0; i < ver; i++) {
+		dest->data[i] = (unsigned char *)calloc(hor, sizeof(unsigned char));
+		if (!dest->data[i])
+			return 1;
+		memcpy(dest->data[i], src->data[i + d] + PIXEL_SIZE(dest) * l, PIXEL_SIZE(src) * dest->bih.biWidth);
+	}
+	return 0;
+}
+
+int turn_bmp(PBMPIMAGE dest, PBMPIMAGE src) {
+	memcpy(&dest->bfh, &src->bfh, sizeof(src->bfh));
+	memcpy(&dest->bih, &src->bih, sizeof(src->bih));
+
+	dest->bih.biHeight = src->bih.biWidth;
+	dest->bih.biWidth = src->bih.biHeight;
+	int hor = ROW_LEN(dest);
+	int ver = dest->bih.biHeight;
+	dest->bih.biSizeImage = hor * ver;
+	dest->bfh.bfSize = dest->bih.biSizeImage + sizeof(dest->bfh) + sizeof(dest->bih);
+	dest->data = (unsigned char **)malloc(ver * sizeof(unsigned char *));
+	if (!dest->data)
+		return 1;
+	for (int i = 0; i < ver; i++) {
+		dest->data[i] = (unsigned char *)calloc(hor, sizeof(unsigned char));
+		if (!dest->data[i])
+			return 1;
+	}
+	for (int i = 0; i < dest->bih.biHeight; i++) {
+		for (int j = 0; j < dest->bih.biWidth; j++) {
+			unsigned char *to = dest->data[i] + PIXEL_SIZE(dest) * j;
+			unsigned char *from = src->data[j] + PIXEL_SIZE(dest) * i;
+			memcpy(to, from, PIXEL_SIZE(dest));
+		}
+	}
+	for (int i = 0; i < dest->bih.biHeight / 2; i++)
+		swap(dest->data[i], dest->data[dest->bih.biHeight - i - 1]);
+	return 0;
+}
+
+int copy_bmp(PBMPIMAGE dest, PBMPIMAGE src) {
+	memcpy(&dest->bfh, &src->bfh, sizeof(src->bfh));
+	memcpy(&dest->bih, &src->bih, sizeof(src->bih));
+	int hor = ROW_LEN(dest);
+	int ver = dest->bih.biHeight;
+	dest->data = (unsigned char **)malloc(ver * sizeof(unsigned char *));
+	if (!dest->data)
+		return 1;
+	for (int i = 0; i < ver; i++) {
+		dest->data[i] = (unsigned char *)calloc(hor, sizeof(unsigned char));
+		if (!dest->data[i])
+			return 1;
+		memcpy(dest->data[i], src->data[i], PIXEL_SIZE(src) * dest->bih.biWidth);
+	}
+	return 0;
+}
+
+void decode(int (*arr)[], char cur) {
+	int code;
+	if (cur >= 'A' && cur <= 'Z')
+		code = cur - 'A';
+	if (cur == ' ')
+		code = 26;
+	if (cur == '.')
+		code = 27;
+	if (cur == ',')
+		code = 28;
+
+	for (int i = 0; i < 5; i++) {
+		(*arr)[i] = code & 1;
+		code >>= 1;
+	}
+	return;
+}
+
+char recode(int *arr) {
+	int code = 0;
+	for (int i = 4; i >= 0; i--) {
+		code <<= 1;
+		code |= (arr[i] & 1);
+	}
+	if (code < 26)
+		return code + 'A';
+	if (code == 26)
+		return ' ';
+	if (code == 27)
+		return '.';
+	if (code == 28)
+		return ',';
+	assert(0);
+	return -1;
+}
+
+void insert(PBMPIMAGE dest, int val, int x, int y, char col) {
+	y *= 3;
+	if (col == 'G')
+		y += 1;
+	if (col == 'R')
+		y += 2;
+	dest->data[x][y] -= (dest->data[x][y] & 1);
+	dest->data[x][y] |= (unsigned char) val;
+	return;
+}
+
+int extract(PBMPIMAGE dest, int x, int y, char col) {
+	y *= 3;
+	if (col == 'G')
+		y += 1;
+	if (col == 'R')
+		y += 2;
+	return (int)(dest->data[x][y] & 1);
+}
+
+int insert_msg(PBMPIMAGE dest, PBMPIMAGE src, FILE *key, FILE *msg) {
+	int check = copy_bmp(dest, src);
+	if (check)
+		return check;
+
+	char cur, col;
+	int x, y;
+	int arr[5];
+	while (fscanf(msg, "%c", &cur) != EOF) {
+		decode(&arr, cur);
+		for (int i = 0; i < 5; i++) {
+			fscanf(key, "%d %d %c", &x, &y, &col);
+			insert(dest, arr[i], x, y, col);
+		}
+	}
+	return 0;
+}
+
+void extract_msg(PBMPIMAGE src, FILE *key, FILE *msg) {
+	char col;
+	int x, y;
+	int arr[5];
+	while (fscanf(key, "%d %d %c", &x, &y, &col) != EOF) {
+		arr[0] = extract(src, x, y, col);
+		for (int i = 1; i < 5; i++) {
+			fscanf(key, "%d %d %c", &x, &y, &col);
+			arr[i] = extract(src, x, y, col);
+		}
+		fprintf(msg, "%c", recode(arr));
+	}
+	return;
+}
+
+void delete_bmp(PBMPIMAGE pic) {
+	int ver = pic->bih.biHeight;
+	for (int i = 0; i < ver; i++) {
+		free(pic->data[i]);
+	}
+	free(pic->data);
+	return;
+}
