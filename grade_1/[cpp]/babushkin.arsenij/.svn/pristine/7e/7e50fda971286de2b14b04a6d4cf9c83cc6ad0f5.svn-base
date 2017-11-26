@@ -1,0 +1,2 @@
+bin/shared_ptr.o: src/shared_ptr.cpp include/matrix.h \
+ include/shared_ptr.h
