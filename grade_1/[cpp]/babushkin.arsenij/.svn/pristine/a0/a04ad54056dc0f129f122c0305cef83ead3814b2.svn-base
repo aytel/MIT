@@ -51,7 +51,7 @@ directs(4), Status(ZeroesMove) {
     for (size_t dir = 0; dir < 4; dir++) {
         for (size_t x = 0; x < BoardSize; x++) {
             for (size_t y = 0; y < BoardSize; y++) {
-                directs[dir].push(std::make_pair(x, y));
+                directs[dir].push( std::make_pair(x, y));
             }
         }
     }
@@ -63,3 +63,4 @@ CellType Board::type(int x, int y) {
     }
     return fields[x][y];
 }
+

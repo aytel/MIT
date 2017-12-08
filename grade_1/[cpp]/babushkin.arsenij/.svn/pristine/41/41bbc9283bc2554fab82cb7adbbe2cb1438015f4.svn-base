@@ -4,7 +4,10 @@ clean:
 
 CF = -I include -c -fno-builtin -std=c++11 -Wall -Werror -pedantic -Wextra 
 
-bin/board.o: src/board.cpp include/board.h
+bin/dsu.o: src/dsu.cpp include/dsu.h
+	g++-4.9 $(CF)$ src/dsu.cpp -o bin/dsu.o
+
+bin/board.o: src/board.cpp include/board.h bin/dsu.o
 	g++-4.9 $(CF)$ src/board.cpp -o bin/board.o
 
 bin/view.o: src/view.cpp include/view.h bin/board.o
