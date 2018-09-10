@@ -1,0 +1,66 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "huffman.h"
+
+using namespace std;
+
+int main(int argc, char **argv) {
+    if (argc != 6) {
+        cerr << "Wrong args\n";
+        return 0;
+    }
+
+    string rd = "", wr = "";
+    int type = -1;
+
+    for (int i = 1; i < 6; i++) {
+        if (string(argv[i]) == "-f" || string(argv[i]) == "--file") {
+            rd = string(argv[++i]);
+        }
+        if (string(argv[i]) == "-o" || string(argv[i]) == "--output") {
+            wr = string(argv[++i]);
+        }
+        if (string(argv[i]) == "-c") {
+            type = 0;
+        }
+        if (string(argv[i]) == "-u") {
+            type = 1;
+        }
+    }
+
+    cerr << rd << ' ' << wr << '\n';
+
+    if (type == -1 || rd == "" || wr == "") {
+        cerr << "Wrong args\n";
+        return 0;
+    }
+
+    ifstream fin(rd, ifstream::binary);
+    ofstream fout(wr, ofstream::binary);
+
+    /*for (int i = 0; i < 1e4; i++) {
+        uint8_t c = i;
+        fout.write((char*)&c, 1);
+    }
+    return 0;*/
+
+    if (fin.fail() || fout.fail()) {
+        cerr << "Failed to open files\n";
+        return 0;
+    }
+
+    huffmanArchiver archiver(fin, fout);
+
+    try {
+        archiver.calc(type);
+    }
+    catch (exception &e) {
+        cerr << e.what() << '\n';
+        //throw e;
+    }
+
+    fin.close(), fout.close();
+
+    return 0;
+}

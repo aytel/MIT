@@ -1,0 +1,109 @@
+#include <cstdint>
+#include <cassert>
+#include <iostream>
+#include <algorithm>
+
+template<typename T, std::size_t N>
+class my_array {
+public:
+    my_array(){}
+
+    T& at(std::size_t index) {
+        if (index >= N) {
+            std::cerr << "Out of range\n";
+            assert(false);
+        }
+        return _data[index];
+    }
+    T& operator[](std::size_t index) {
+        return _data[index];
+    }
+    const T& at(std::size_t index) const {
+        if (index >= N) {
+            std::cerr << "Out of range\n";
+            assert(false);
+        }
+        return _data[index];
+    }
+    const T& operator[](std::size_t index) const {
+        return _data[index];
+    }
+
+    bool empty() const {
+        return !N;
+    }
+    std::size_t size() const {
+        return N;
+    }
+    void fill(const T& val) {
+        std::fill(_data, _data + N, val);
+    }
+private:
+    T _data[N];
+};
+
+class ref {
+public:
+    ref(uint8_t& val, std::size_t ind): val(val), ind(ind) {}
+    ~ref(){}
+    operator bool() const {
+        return (val >> ind) & 1;
+    }
+    ref& operator= (bool x) {
+        if ((val >> ind) ^ x) {
+            val ^= (uint8_t)1 << ind;
+        }
+        return *this;
+    }
+    ref& operator= (const ref& r) {
+        this->operator=(r.operator bool());
+        return *this;
+    }
+private:
+    uint8_t& val;
+    std::size_t ind;
+};
+
+template<std::size_t N>
+class my_array<bool, N> {
+public:
+    my_array(){
+        fill(0);
+    }
+    bool at(std::size_t index) const {
+        if (index >= N) {
+            std::cerr << "Out of range\n";
+            assert(false);
+        }
+        std::size_t fr = index / 8, sc = index % 8;
+        return (_data[fr] >> sc) & 1;
+    }
+    ref at(std::size_t index) {
+        if (index >= N) {
+            std::cerr << "Out of range\n";
+            assert(false);
+        }
+        std::size_t fr = index / 8, sc = index % 8;
+        return ref(_data[fr], sc);
+    }
+    bool operator[](std::size_t index) const {
+        std::size_t fr = index / 8, sc = index % 8;
+        return (_data[fr] >> sc) & 1;
+    }
+    ref operator[](std:: size_t index) {
+        std::size_t fr = index / 8, sc = index % 8;
+        return ref(_data[fr], sc);
+    }
+    bool empty() const {
+        return !N;
+    }
+    std::size_t size() const {
+        return N;
+    }
+    void fill(bool val) {
+        uint8_t res = (val ? -1 : 0);
+        std::fill(_data, _data + sizeof(_data) / sizeof(char), res);
+    }
+private:
+    uint8_t _data[(N - 1) / 8 + 1];
+};

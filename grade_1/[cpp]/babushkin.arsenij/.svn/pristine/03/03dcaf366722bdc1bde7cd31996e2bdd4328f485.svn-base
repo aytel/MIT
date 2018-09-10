@@ -1,0 +1,1 @@
+bin/smoke_compile.o: src/smoke_compile.cpp include/my_array.h

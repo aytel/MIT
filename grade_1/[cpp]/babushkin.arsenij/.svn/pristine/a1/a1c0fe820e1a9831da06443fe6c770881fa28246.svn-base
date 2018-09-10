@@ -1,0 +1,163 @@
+#include "employees.h"
+
+std::ostream& operator<< (std::ostream &os, Employee *e) {
+    e->write(os);
+    return os;
+}
+
+std::istream& operator>> (std::istream &is, Employee *e) {
+    e->read(is);
+    return is;
+}
+
+int Developer::salary() const {
+    int salary = base_salary;
+    if (has_bonus) { salary += 1000; }
+    return salary;
+}
+
+void Developer::write(std::ostream &os) const {
+    os << "Developer\n";
+    os << "Name: " << name << '\n';
+    os << "Base salary: " << base_salary << '\n';
+    os << "Has bonus: " << (has_bonus ? '+' : '-') << '\n'; 
+}
+
+void Developer::read(std::istream &is) {
+    is >> name >> base_salary >> has_bonus;
+}
+
+void Developer::writeb(std::ofstream &os) const {
+    int32_t type = 1;
+    os.write((char*)&type, sizeof(int32_t));
+    os.write(name.c_str(), name.size());
+    char c = '\0';
+    os.write(&c, sizeof(char));
+    os.write((char*)&base_salary, sizeof(int32_t));
+    os.write((char*)&has_bonus, sizeof(bool));
+}
+
+void Developer::readb(std::ifstream &is) {
+    getline(is, name, '\0');
+    is.read((char*)&base_salary, sizeof(int32_t));
+    is.read((char*)&has_bonus, sizeof(bool));
+}
+
+int SalesManager::salary() const {
+    return base_salary + sold_nm * price * 0.01;
+}
+
+void SalesManager::write(std::ostream &os) const {
+    os << "Sales manager\n";
+    os << "Name: " << name << '\n';
+    os << "Base salary: " << base_salary << '\n';
+    os << "Sold items: " << sold_nm << '\n';
+    os << "Item price: " << price << '\n';
+}
+
+void SalesManager::read(std::istream &is) {
+    is >> name >> base_salary >> sold_nm >> price;
+}
+
+void SalesManager::writeb(std::ofstream &os) const {
+    int32_t type = 2;
+    os.write((char*)&type, sizeof(int32_t));
+    os.write(name.c_str(), name.size());
+    char c = '\0';
+    os.write(&c, sizeof(char));
+    os.write((char*)&base_salary, sizeof(int32_t));
+    os.write((char*)&sold_nm, sizeof(int32_t));
+    os.write((char*)&price, sizeof(int32_t));
+}
+
+void SalesManager::readb(std::ifstream &is) {
+    getline(is, name, '\0');
+    is.read((char*)&base_salary, sizeof(int32_t));
+    is.read((char*)&sold_nm, sizeof(int32_t));
+    is.read((char*)&price, sizeof(int32_t));
+}
+
+std::ostream& operator<< (std::ostream& os, EmployeesArray &e) {
+    for (int i = 0; i < e.size(); i++) {
+        os << i + 1 << ". " << e[i];
+    }
+    os << "== Total salary: " << e.total_salary() << '\n';
+    return os;
+}
+
+std::istream& operator>> (std::istream& is, EmployeesArray &e) {
+    Employee *cur;
+    int type;
+    is >> type;
+    if (type == 1) {
+        auto temp = new Developer();
+        temp->read(is);
+        cur = temp;
+    } else {
+        auto temp = new SalesManager();
+        temp->read(is);
+        cur = temp;
+    }
+    e.add(cur);
+    return is;
+}
+
+EmployeesArray::EmployeesArray(): employees(new Employee*[1]), total(0), sz(0), cap(1) {}
+
+Employee*& EmployeesArray::operator[] (int i) {
+    return employees[i];
+}
+
+int EmployeesArray::total_salary() const {
+    return total;
+}
+
+int EmployeesArray::size() const {
+    return sz;
+}
+
+void EmployeesArray::add(Employee *e) {
+    if (sz == cap) {
+        Employee **temp = new Employee*[2 * cap];
+        std::copy(employees, employees + cap, temp);
+        std::swap(temp, employees);
+        delete[] temp;
+        cap <<= 1;
+    }
+    employees[sz++] = e;
+    total += e->salary();
+}
+
+EmployeesArray::~EmployeesArray() {
+    for (int i = 0; i < sz; i++) {
+        delete employees[i];
+    }
+    delete[] employees;
+}
+
+void EmployeesArray::load(std::ifstream &is) {
+    int32_t n;
+    is.read((char*)&n, sizeof(int32_t));
+    for (int32_t i = 0; i < n; i++) {
+        Employee *cur;
+        int32_t type;
+        is.read((char*)&type, sizeof(int32_t));
+        if (type == 1) {
+            auto temp = new Developer();
+            temp->readb(is);
+            cur = temp;
+        } else {
+            auto temp = new SalesManager();
+            temp->readb(is);
+            cur = temp;
+        }
+        add(cur);
+    }
+}
+
+void EmployeesArray::save(std::ofstream &os) const {
+    os.write((char*)&sz, sizeof(int32_t));
+    for (int i = 0; i < sz; i++) {
+        employees[i]->writeb(os);
+    }
+}

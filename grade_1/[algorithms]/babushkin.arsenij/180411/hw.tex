@@ -1,0 +1,63 @@
+\documentclass[12pt]{article} 
+
+\usepackage{cmap} 
+\usepackage[T2A]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage[utf8]{inputenc} 
+\usepackage{amsmath, amssymb} 
+
+\usepackage{hologo} 
+\usepackage[russian]{hyperref} 
+
+\textwidth=160mm
+\hoffset=-15mm
+\textheight=240mm
+\voffset=-20mm
+
+\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} 
+
+\begin{document}
+\def\t{\texttt}
+
+Бабушкин А.
+
+\section{Обязательные задачи}
+
+\begin{enumerate}
+    \setlength{\parskip}{0pt} 
+    \setlength{\itemsep}{0pt} 
+    \item Построить AVL на отрезке -- это взять середину отрезка и сделать корнем, после этого построить AVL на левой и правой половине и 
+    их корни присоединить к себе. \\
+    \item Держим AVL с теми же ключами, что и в нашем BST, ещё там лежат ссылки на соответствующие вершины в BST. Хотим добавить x. Находим 
+    lower_bound(x) в AVL и prev(lower_bound(x)). Смотрим их вершины в BST. Добавляем х правым сыном prev или левым сыном lower_bound (только одно из 
+    этих мест свободно). Добавляем x в AVL. \\
+    \item Для вершины в AVL держим minx, miny, maxx, maxy в поддереве. Ответ на запрос -- обходим аналогично задачам из практики, добываем 
+    настоящие границы по x и y, выводим ответ. \\
+    \item ~\\
+    \t{
+        Node\* lower\_bound(Node\* v, int x) \{ \\
+        if (v == NULL) \\
+                return v; \\
+            if (v->x < x) \\
+                return lower\_bound(v->r, x); \\
+            if (v->x >= x) \{ \\
+                fnd = lower\_bound(v->l, x); \\
+                return (fnd ? fnd : v); \\
+            \} \\
+        \}
+    } \\
+    \item Умеем искать минимум y на отрезке за лог -- нашли, удалили, повторили k раз. Потом запихнём всё обратно. \\
+    \item Дерево (y, x) по ключу y. Умеем искать минимум x на отрезке за лог -- нашли, удалили, и так пока минимум не стал больше r. Потом вернули. \\
+\end{enumerate}
+
+\section{Дополнительные задачи}
+
+\begin{enumerate}
+    \setlength{\parskip}{0pt} 
+    \setlength{\itemsep}{0pt} 
+    \item ~\\
+    \item Извлечём n / $\log n$ раз $\log n$ минимальных со всего отрезка. После этого посортим каждый блок за $\log n \log \log n$. \\
+    Итого посортили все y за $n \log \log n$. Ой. \\
+\end{enumerate}
+
+\end{document}

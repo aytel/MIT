@@ -1,0 +1,49 @@
+\documentclass[12pt]{article} 
+
+\usepackage{cmap} 
+\usepackage[T2A]{fontenc}
+\usepackage[russian,english]{babel}
+\usepackage[utf8]{inputenc} 
+\usepackage{amsmath, amssymb} 
+
+\usepackage{hologo} 
+\usepackage[russian]{hyperref} 
+
+\textwidth=160mm
+\hoffset=-15mm
+\textheight=240mm
+\voffset=-20mm
+
+\newcommand{\Section}[1]{\section{#1}\vspace{-1.5em}\hspace*{\parindent}\unskip} 
+
+\begin{document}
+\def\t{\texttt}
+
+Бабушкин А.
+
+\section{Обязательные задачи}
+
+\begin{enumerate}
+    \setlength{\parskip}{0pt} 
+    \setlength{\itemsep}{0pt} 
+    \item ~\\
+    \item ~\\
+    a) Сделаем его на персистентным массиве, будет $n\log n$ памяти и $n\log^2 n$ времени. \\
+    b) Построим и обойдём дерево версий. Нам нужен будет СНМ с откатами, поэтому в сжатии путей смысла нет. nlog памяти и времени. \\
+    \item ~\\
+    \item ~\\
+    \item Построим центроиду. Теперь все запросы разбились на два запроса "на пути от корня дерева до вершины среди префикса рёбер по весу узнать 
+    максимум цены". Это похоже на обычный запрос к ДД, где ключом будет вес, но непонятно как такое ДД строить. Давайте сделаем его персистентным -- 
+    пока будем на очередном шаге обходить поддерево центроиды, будем закидывать новое ребро в персистентное ДД и получать новую версию ДД, Построим 
+    мы это всё за $n\log^2 n$, но отвечать на запрос будем за лог -- найти разделяющую вершины центроиду и сделать два запроса к ДД.\\
+\end{enumerate}
+
+\section{Дополнительные задачи}
+
+\begin{enumerate}
+    \setlength{\parskip}{0pt} 
+    \setlength{\itemsep}{0pt} 
+    \item 
+\end{enumerate}
+
+\end{document}

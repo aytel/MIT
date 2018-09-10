@@ -1,0 +1,97 @@
+#include <iostream>
+#include <cstring>
+
+#include "my_vector.h"
+
+class Product {
+public:
+    Product(const std::string &name, int quantity, double price): name_(name), quantity_(quantity), price_(price) {}
+
+    Product(){
+        name_ = "";
+        quantity_ = price_ = 0;
+    }
+
+    ~Product(){}
+
+    Product(const Product &other): name_(other.name_), quantity_(other.quantity_), price_(other.price_) {}
+
+    Product& operator=(const Product &other) {
+        name_ = other.name_;
+        quantity_ = other.quantity_;
+        price_ = other.price_;
+        return *this;
+    }
+
+    std::string name() const {
+        return name_;
+    }
+    int quantity() const {
+        return quantity_;
+    }
+    double price() const {
+        return price_;
+    }
+
+    bool operator== (const Product &other) {
+        return (name_ == other.name_) && (price_ == other.price_) && (quantity_ == other.quantity_);
+    }
+
+    bool operator!= (const Product &other) {
+        return !(*this == other);
+    }
+
+private:
+    std::string name_;
+    int quantity_;
+    double price_;
+};
+
+std::ostream& operator<<(std::ostream &os, Product &val) {
+    os << val.name() << ' ' << val.quantity() << ' ' << val.price();
+    return os;
+}
+
+void print(const my_vector<Product>& v) {
+    std::cout << v << std::endl;
+}
+
+template<class T>
+void test_my_vector(const T& v1, const T& v2) {
+    my_vector<T> vec;
+
+    vec.resize(1, v1);
+    if (vec.size() != 1 || vec[0] != v1) {
+        std::cerr << "resize not OK\n";
+        exit(1);
+    }
+
+    vec.push_back(v2);
+    if (vec.size() != 2 || vec[1] != v2) {
+        std::cerr << "push_back not OK\n";
+        exit(1);
+    }
+
+    vec.pop_back();
+    if (vec.size() != 1) {
+        std::cerr << "pop_back not OK\n";
+        exit(1);
+    }
+
+    vec.reserve(20);
+    if (vec.capacity() != 32) {
+        std::cerr << "reserve not OK\n";
+        exit(1);
+    }
+
+    vec.clear();
+
+}
+
+int main() {
+
+    test_my_vector<int>(5, 10);
+    test_my_vector<Product>(Product("asdf", 4, 12.0), Product("qwe", -1, 7.5));
+
+    return 0;
+}
